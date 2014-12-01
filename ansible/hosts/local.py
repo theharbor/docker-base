@@ -11,7 +11,7 @@ def inventory():
     }
     groups['_meta'] = {
         'hostvars': {
-            'localhost': {"ENV_" + k: v for k, v in os.environ.items()}
+            'localhost': {"ENV": dict(os.environ)}
         }
     }
     groups['_meta']['hostvars']['localhost']['ansible_connection'] = "local"
