@@ -63,3 +63,4 @@ ln -s /opt/ansible/bin/ansible-pull /usr/local/bin/ansible-pull
 ln -s /opt/ansible/bin/ansible-vault /usr/local/bin/ansible-vault
 
 rm /etc/dpkg/dpkg.cfg.d/02-unsafe-io
+rm -rf /var/lib/apt/lists/*
