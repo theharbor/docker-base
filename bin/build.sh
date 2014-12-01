@@ -47,7 +47,7 @@ apt-get dist-upgrade --no-install-recommends --yes
 # Install common and required packages
 aptinstall python python-dev python-virtualenv python-pip python-pexpect build-essential \
            ca-certificates apt-transport-https software-properties-common \
-           supervisor cron vim htop iotop tcpdump
+           openssh-server supervisor cron vim htop iotop tcpdump
 
 # Install ansible
 virtualenv --python /usr/bin/python2 /opt/ansible
