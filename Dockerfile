@@ -11,4 +11,5 @@ COPY bin/runif.sh /usr/bin/runif
 COPY ansible/ /opt/ansible/
 COPY conf/supervisor/ /etc/supervisor/conf.d/
 
+EXPOSE 22
 ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf", "--nodaemon"]
