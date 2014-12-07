@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 set -x
 export DEBIAN_FRONTEND=noninteractive
-alias aptinstall="apt-get install --no-install-recommends --yes"
+aptinstall="apt-get install --no-install-recommends --yes"
 
 # Temporarily disable dpkg fsync to make building faster.
 echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/02-unsafe-io
@@ -34,20 +34,31 @@ ln -sf /bin/true /sbin/initctl
 dpkg-divert --local --rename --add /usr/bin/ischroot
 ln -sf /bin/true /usr/bin/ischroot
 
+# Replace start stop and restart commands with wrapper to supervisorctl
+rm /sbin/{start,stop,restart}
+for file in start stop restart
+do
+    ln -s /usr/local/sbin/servicewrapper /usr/local/sbin/$file
+done
+
 # Update package lists
 apt-get update
 
 # Set UTF8 locale
-aptinstall language-pack-en
+$aptinstall language-pack-en
 echo LC_ALL="en_US.utf8" >> /etc/environment
 
 # Upgrade all packages
 apt-get dist-upgrade --no-install-recommends --yes
 
 # Install common and required packages
-aptinstall python python-dev python-virtualenv python-pip python-pexpect build-essential \
-           ca-certificates apt-transport-https software-properties-common \
-           openssh-server supervisor cron vim htop iotop tcpdump
+$aptinstall python python-dev python-virtualenv python-pip python-pexpect build-essential \
+            ca-certificates apt-transport-https software-properties-common \
+            openssh-server supervisor cron vim syslog-ng-core
+
+# Replace the system() source because inside Docker we
+# can't access /proc/kmsg.
+sed -i -E 's/^(\s*)system\(\);/\1unix-stream("\/dev\/log");/' /etc/syslog-ng/syslog-ng.conf
 
 # Install ansible
 virtualenv --python /usr/bin/python2 /opt/ansible
