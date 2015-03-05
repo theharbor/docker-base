@@ -1,5 +1,0 @@
----
-
-- hosts: local
-  tasks:
-    - include: nginx-base.yml
