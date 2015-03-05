@@ -52,7 +52,7 @@ echo LC_ALL="en_US.utf8" >> /etc/environment
 apt-get dist-upgrade --no-install-recommends --yes
 
 # Install common and required packages
-$aptinstall python python-dev python-virtualenv python-pip python-pexpect build-essential \
+$aptinstall python python-dev python-virtualenv python-pip build-essential \
             ca-certificates apt-transport-https software-properties-common \
             openssh-server supervisor cron vim syslog-ng-core
 

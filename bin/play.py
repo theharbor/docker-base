@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import os
+import subprocess
 import sys
-import pexpect
 
 
 """
@@ -21,18 +21,12 @@ if __name__ == "__main__":
     if len(sys.argv) < 3:
         exit("Usage: {} PLAYBOOK COMMAND [args..]".format(sys.argv[0]))
 
-    p = pexpect.spawn("ansible-playbook", [sys.argv[1]])
-    while True:
-        line = p.readline()
-        if line == "":
-            break
-        sys.stdout.write(line)
-        sys.stdout.flush()
-    p.close()
+    try:
+        p = subprocess.check_call(["ansible-playbook", sys.argv[1]])
+    except subprocess.CalledProcessError as e:
+        exit(str(e))
 
     print('-'*79)
-    if p.exitstatus != 0:
-        exit("ansible-playbook exited with non-zero exit status!")
 
     try:
         os.execvp(sys.argv[2], sys.argv[2:])
